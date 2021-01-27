@@ -2,7 +2,7 @@ overwrite: true
 schema: "https://welbi.org/api/graphql?token=1"
 # documents: "src/**/*.graphql"
 generates:
-  src/generated/graphql.tsx:
+  src/generated/graphql.types.tsx:
     plugins:
       - "typescript"
       - "typescript-operations"
@@ -10,6 +10,9 @@ generates:
       - "fragment-matcher"
       - "named-operations-object"
       - "typescript-apollo-client-helpers"
-  ./graphql.schema.json:
+  src/generated/graphql.introspection.schema.json:
     plugins:
       - "introspection"
+  src/generated/schema.graphql:
+    plugins:
+      - "schema-ast"

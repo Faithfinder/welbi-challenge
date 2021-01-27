@@ -1,0 +1,130 @@
+enum EnumStatus {
+  Active
+  Passive
+  Declined
+  Undefined
+}
+
+enum LevelOfCare {
+  INDEPENDENT
+  ASSISTED
+  MEMORY
+  LONGTERM
+}
+
+enum Ambulation {
+  NOLIMITATIONS
+  CANE
+  WALKER
+  WHEELCHAIR
+}
+
+"""A data and time, represented in ISO-8601 string"""
+scalar DateTime
+
+type Resident {
+  id: ID!
+  name: String!
+  preferredName: String
+  status: String
+  firstName: String!
+  lastName: String!
+  room: String!
+  attendance: [Attendance!]!
+  birthDate: DateTime!
+  moveInDate: DateTime!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  levelOfCare: LevelOfCare
+  ambulation: Ambulation
+}
+
+type Program {
+  id: ID!
+  parentId: ID
+  location: String!
+  allDay: Boolean!
+  tags: [String!]!
+  name: String!
+  start: DateTime!
+  end: DateTime!
+  dimension: String!
+  facilitators: [String!]!
+  levelOfCare: [LevelOfCare!]!
+  hobbies: [String!]!
+  isRepeated: Boolean
+  attendance: [Attendance!]!
+  recurrence: Recurrence
+}
+
+type Recurrence {
+  frequency: String
+  dtstart: DateTime
+  interval: Int
+  weekstart: Int
+  count: Int
+  until: DateTime
+  byMonth: Int
+  byMonthday: Int
+  byYearday: Int
+  byWeekno: Int
+  byWeekday: Int
+  byDay: Int
+  byHour: Int
+  byMinute: Int
+  bySecond: Int
+  bySetPos: String
+}
+
+type Attendance {
+  status: EnumStatus
+  resident: Resident
+  program: Program
+  programId: ID!
+  residentId: ID!
+}
+
+type Query {
+  programs: [Program!]!
+  residents: [Resident!]!
+}
+
+input ProgramInput {
+  parentId: ID
+  location: String!
+  allDay: Boolean!
+  tags: [String!]!
+  name: String!
+  start: DateTime!
+  end: DateTime!
+  dimension: String!
+  facilitators: [String!]!
+  levelOfCare: [LevelOfCare!]!
+  hobbies: [String!]!
+  isRepeated: Boolean
+}
+
+input ResidentInput {
+  name: String!
+  preferredName: String
+  status: String
+  firstName: String!
+  lastName: String!
+  room: String!
+  birthDate: DateTime!
+  moveInDate: DateTime!
+  levelOfCare: LevelOfCare
+  ambulation: Ambulation
+}
+
+input AttendanceInput {
+  status: EnumStatus!
+  residentId: ID!
+  programId: ID!
+}
+
+type Mutation {
+  createResident(input: ResidentInput!): Resident!
+  createProgram(input: ProgramInput!): Program!
+  setAttendance(input: AttendanceInput!): Attendance!
+}
