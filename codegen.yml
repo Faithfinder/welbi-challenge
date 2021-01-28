@@ -1,6 +1,6 @@
 overwrite: true
 schema: "https://welbi.org/api/graphql?token=1"
-# documents: "src/**/*.graphql"
+documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.types.tsx:
     plugins:

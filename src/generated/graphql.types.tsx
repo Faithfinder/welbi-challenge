@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 import { FieldPolicy, FieldReadFunction, TypePolicies, TypePolicy } from '@apollo/client/cache';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -165,6 +166,51 @@ export type MutationSetAttendanceArgs = {
   input: AttendanceInput;
 };
 
+export type ResidentsListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ResidentsListQuery = (
+  { __typename?: 'Query' }
+  & { residents: Array<(
+    { __typename?: 'Resident' }
+    & Pick<Resident, 'id' | 'name'>
+  )> }
+);
+
+
+export const ResidentsListDocument = gql`
+    query ResidentsList {
+  residents {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useResidentsListQuery__
+ *
+ * To run a query within a React component, call `useResidentsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResidentsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResidentsListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useResidentsListQuery(baseOptions?: Apollo.QueryHookOptions<ResidentsListQuery, ResidentsListQueryVariables>) {
+        return Apollo.useQuery<ResidentsListQuery, ResidentsListQueryVariables>(ResidentsListDocument, baseOptions);
+      }
+export function useResidentsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ResidentsListQuery, ResidentsListQueryVariables>) {
+          return Apollo.useLazyQuery<ResidentsListQuery, ResidentsListQueryVariables>(ResidentsListDocument, baseOptions);
+        }
+export type ResidentsListQueryHookResult = ReturnType<typeof useResidentsListQuery>;
+export type ResidentsListLazyQueryHookResult = ReturnType<typeof useResidentsListLazyQuery>;
+export type ResidentsListQueryResult = Apollo.QueryResult<ResidentsListQuery, ResidentsListQueryVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
@@ -176,6 +222,11 @@ export type MutationSetAttendanceArgs = {
 };
       export default result;
     
+export const namedOperations = {
+  Query: {
+    ResidentsList: 'ResidentsList'
+  }
+}
 export type ResidentKeySpecifier = ('id' | 'name' | 'preferredName' | 'status' | 'firstName' | 'lastName' | 'room' | 'attendance' | 'birthDate' | 'moveInDate' | 'createdAt' | 'updatedAt' | 'levelOfCare' | 'ambulation' | ResidentKeySpecifier)[];
 export type ResidentFieldPolicy = {
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
