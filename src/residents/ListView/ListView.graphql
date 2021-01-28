@@ -1,6 +1,0 @@
-query ResidentsList {
-  residents {
-    id
-    name
-  }
-}

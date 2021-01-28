@@ -1,0 +1,17 @@
+query ResidentsList {
+  residents {
+    ...Resident
+  }
+}
+
+fragment Resident on Resident {
+  id
+  name
+  preferredName
+  status
+  room
+  levelOfCare
+  ambulation
+  birthDate
+  moveInDate
+}

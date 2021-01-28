@@ -24,17 +24,17 @@ export enum EnumStatus {
 }
 
 export enum LevelOfCare {
-  Independent = 'INDEPENDENT',
-  Assisted = 'ASSISTED',
-  Memory = 'MEMORY',
-  Longterm = 'LONGTERM'
+  INDEPENDENT = 'INDEPENDENT',
+  ASSISTED = 'ASSISTED',
+  MEMORY = 'MEMORY',
+  LONGTERM = 'LONGTERM'
 }
 
 export enum Ambulation {
-  Nolimitations = 'NOLIMITATIONS',
-  Cane = 'CANE',
-  Walker = 'WALKER',
-  Wheelchair = 'WHEELCHAIR'
+  NOLIMITATIONS = 'NOLIMITATIONS',
+  CANE = 'CANE',
+  WALKER = 'WALKER',
+  WHEELCHAIR = 'WHEELCHAIR'
 }
 
 
@@ -152,17 +152,17 @@ export type Mutation = {
 };
 
 
-export type MutationCreateResidentArgs = {
+export type MutationcreateResidentArgs = {
   input: ResidentInput;
 };
 
 
-export type MutationCreateProgramArgs = {
+export type MutationcreateProgramArgs = {
   input: ProgramInput;
 };
 
 
-export type MutationSetAttendanceArgs = {
+export type MutationsetAttendanceArgs = {
   input: AttendanceInput;
 };
 
@@ -173,19 +173,35 @@ export type ResidentsListQuery = (
   { __typename?: 'Query' }
   & { residents: Array<(
     { __typename?: 'Resident' }
-    & Pick<Resident, 'id' | 'name'>
+    & ResidentFragment
   )> }
 );
 
+export type ResidentFragment = (
+  { __typename?: 'Resident' }
+  & Pick<Resident, 'id' | 'name' | 'preferredName' | 'status' | 'room' | 'levelOfCare' | 'ambulation' | 'birthDate' | 'moveInDate'>
+);
 
+export const ResidentFragmentDoc = gql`
+    fragment Resident on Resident {
+  id
+  name
+  preferredName
+  status
+  room
+  levelOfCare
+  ambulation
+  birthDate
+  moveInDate
+}
+    `;
 export const ResidentsListDocument = gql`
     query ResidentsList {
   residents {
-    id
-    name
+    ...Resident
   }
 }
-    `;
+    ${ResidentFragmentDoc}`;
 
 /**
  * __useResidentsListQuery__
@@ -225,6 +241,9 @@ export type ResidentsListQueryResult = Apollo.QueryResult<ResidentsListQuery, Re
 export const namedOperations = {
   Query: {
     ResidentsList: 'ResidentsList'
+  },
+  Fragment: {
+    Resident: 'Resident'
   }
 }
 export type ResidentKeySpecifier = ('id' | 'name' | 'preferredName' | 'status' | 'firstName' | 'lastName' | 'room' | 'attendance' | 'birthDate' | 'moveInDate' | 'createdAt' | 'updatedAt' | 'levelOfCare' | 'ambulation' | ResidentKeySpecifier)[];
