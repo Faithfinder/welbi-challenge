@@ -178,7 +178,7 @@ export type ProgramsListQuery = (
 
 export type ProgramFragment = (
   { __typename?: 'Program' }
-  & Pick<Program, 'id' | 'name' | 'location' | 'allDay' | 'start' | 'end' | 'tags' | 'dimension' | 'facilitators' | 'levelOfCare' | 'hobbies' | 'isRepeated'>
+  & Pick<Program, 'id' | 'name' | 'location' | 'allDay' | 'start' | 'end' | 'tags' | 'dimension' | 'facilitators' | 'levelOfCare' | 'hobbies'>
   & { attendance: Array<(
     { __typename?: 'Attendance' }
     & Pick<Attendance, 'residentId' | 'status'>
@@ -218,7 +218,6 @@ export const ProgramFragmentDoc = gql`
   facilitators
   levelOfCare
   hobbies
-  isRepeated
 }
     `;
 export const ResidentFragmentDoc = gql`

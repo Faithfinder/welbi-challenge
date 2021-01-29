@@ -20,5 +20,4 @@ fragment Program on Program {
   facilitators
   levelOfCare
   hobbies
-  isRepeated
 }
