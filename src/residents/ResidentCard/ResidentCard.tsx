@@ -1,4 +1,11 @@
-import { Chip, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
+import {
+  Box,
+  Chip,
+  Grid,
+  makeStyles,
+  Paper,
+  Typography,
+} from "@material-ui/core";
 import { ResidentFragment } from "../../generated/graphql.types";
 import { InfoField } from "../../shared/InfoField";
 import { formatDate } from "../../shared/util";
@@ -10,14 +17,22 @@ interface Props {
   onClick: (id: string) => void;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
-  card: { padding: spacing(1) },
+const useStyles = makeStyles(({ spacing, palette }) => ({
+  card: {
+    padding: spacing(2),
+    margin: spacing(1, 0),
+  },
+  cardSelected: {
+    backgroundColor: palette.primary.main,
+    color: palette.primary.contrastText,
+  },
   headerRow: {
     marginBottom: spacing(1),
   },
   data: {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: spacing(1),
   },
 }));
 
@@ -34,8 +49,9 @@ export const ResidentCard: React.FC<Props> = ({
 
   return (
     <Paper
-      className={classes.card}
-      elevation={selected ? 3 : 1}
+      className={`${classes.card} ${
+        selected ? classes.cardSelected : undefined
+      }`}
       variant={selected ? "outlined" : "elevation"}
       onClick={onCardClick}
     >
@@ -43,7 +59,7 @@ export const ResidentCard: React.FC<Props> = ({
         <NameDisplay resident={resident} />
         <Chip label={resident.status} />
       </Grid>
-      <Grid className={classes.data}>
+      <Box className={classes.data}>
         <InfoField label="Room" data={resident.room} />
         <InfoField
           label="Level of care"
@@ -55,7 +71,7 @@ export const ResidentCard: React.FC<Props> = ({
         />
         <InfoField label="Birthday" data={formatDate(resident.birthDate)} />
         <InfoField label="Moved in" data={formatDate(resident.moveInDate)} />
-      </Grid>
+      </Box>
     </Paper>
   );
 };
