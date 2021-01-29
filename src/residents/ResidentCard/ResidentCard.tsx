@@ -69,8 +69,14 @@ export const ResidentCard: React.FC<Props> = ({
           label="Ambulation"
           data={AmbulationMap[resident.ambulation!]?.displayValue}
         />
-        <InfoField label="Birthday" data={formatDate(resident.birthDate)} />
-        <InfoField label="Moved in" data={formatDate(resident.moveInDate)} />
+        <InfoField
+          label="Birthday"
+          data={formatDate(new Date(resident.birthDate))}
+        />
+        <InfoField
+          label="Moved in"
+          data={formatDate(new Date(resident.moveInDate))}
+        />
       </Box>
     </Paper>
   );

@@ -1,5 +1,13 @@
-import { Scalars } from "../generated/graphql.types";
+import { format } from "date-fns";
 
-export const formatDate = (date: Scalars["DateTime"]): string => {
-  return Intl.DateTimeFormat().format(new Date(date));
+export const formatDateTime = (date: Date): string => {
+  return format(date, "dd MMM yyyy hh:mm aaaa");
+};
+
+export const formatDate = (date: Date): string => {
+  return format(date, "dd MMM yyyy");
+};
+
+export const formatTime = (date: Date): string => {
+  return format(date, "hh:mm aaaa");
 };
