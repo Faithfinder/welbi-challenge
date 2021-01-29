@@ -1,0 +1,24 @@
+query ProgramsList {
+  programs {
+    ...Program
+  }
+}
+
+fragment Program on Program {
+  id
+  name
+  location
+  allDay
+  start
+  end
+  tags
+  attendance {
+    residentId
+    status
+  }
+  dimension
+  facilitators
+  levelOfCare
+  hobbies
+  isRepeated
+}
