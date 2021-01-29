@@ -1,15 +1,7 @@
-import {
-  Box,
-  Chip,
-  Grid,
-  makeStyles,
-  Paper,
-  Typography,
-} from "@material-ui/core";
+import { Chip, Grid, makeStyles, Paper, Typography } from "@material-ui/core";
 import { ResidentFragment } from "../../generated/graphql.types";
 import { InfoField } from "../../shared/InfoField";
 import { formatDate } from "../../shared/util";
-import { AmbulationMap, LevelOfCareMap } from "../util";
 
 interface Props {
   resident: ResidentFragment;
@@ -31,7 +23,7 @@ const useStyles = makeStyles(({ spacing, palette }) => ({
   },
   data: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
     gap: spacing(1),
   },
 }));
@@ -59,16 +51,10 @@ export const ResidentCard: React.FC<Props> = ({
         <NameDisplay resident={resident} />
         <Chip label={resident.status} />
       </Grid>
-      <Box className={classes.data}>
+      <section className={classes.data}>
         <InfoField label="Room" data={resident.room} />
-        <InfoField
-          label="Level of care"
-          data={LevelOfCareMap[resident.levelOfCare!]?.displayValue}
-        />
-        <InfoField
-          label="Ambulation"
-          data={AmbulationMap[resident.ambulation!]?.displayValue}
-        />
+        <InfoField label="Level of care" data={resident.levelOfCare} />
+        <InfoField label="Ambulation" data={resident.ambulation} />
         <InfoField
           label="Birthday"
           data={formatDate(new Date(resident.birthDate))}
@@ -77,7 +63,7 @@ export const ResidentCard: React.FC<Props> = ({
           label="Moved in"
           data={formatDate(new Date(resident.moveInDate))}
         />
-      </Box>
+      </section>
     </Paper>
   );
 };

@@ -3,7 +3,11 @@ import { useProgramsListQuery } from "../../generated/graphql.types";
 import { ListView } from "../../shared/ListView";
 import { ProgramCard } from "../ProgramCard/ProgramCard";
 
-export const List: React.FC = () => {
+interface Props {
+  selectedResidentId: string | null;
+}
+
+export const List: React.FC<Props> = ({ selectedResidentId }) => {
   const { data, loading, error } = useProgramsListQuery();
 
   if (error) throw error;
@@ -11,7 +15,11 @@ export const List: React.FC = () => {
   return (
     <ListView loading={loading}>
       {data?.programs?.map((program) => (
-        <ProgramCard program={program} key={program.id} />
+        <ProgramCard
+          program={program}
+          key={program.id}
+          selectedResidentId={selectedResidentId}
+        />
       ))}
     </ListView>
   );

@@ -13,11 +13,15 @@ fragment Program on Program {
   end
   tags
   attendance {
-    residentId
-    status
+    ...Attendance
   }
   dimension
   facilitators
   levelOfCare
   hobbies
+}
+
+fragment Attendance on Attendance {
+  residentId
+  status
 }

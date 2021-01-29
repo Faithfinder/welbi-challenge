@@ -1,13 +1,17 @@
-import React, { useState } from "react";
 import { ListView } from "../../shared/ListView";
 import { useResidentsListQuery } from "../../generated/graphql.types";
 import { ResidentCard } from "../ResidentCard/ResidentCard";
 
-export const List: React.FC = () => {
+interface Props {
+  selectedResidentId: string | null;
+  setSelectedResidentId: React.Dispatch<string | null>;
+}
+
+export const List: React.FC<Props> = ({
+  selectedResidentId,
+  setSelectedResidentId,
+}) => {
   const { data, loading, error } = useResidentsListQuery();
-  const [selectedResidentId, setSelectedResidentId] = useState<string | null>(
-    null
-  );
 
   if (error) throw error;
 

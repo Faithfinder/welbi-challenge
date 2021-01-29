@@ -181,8 +181,13 @@ export type ProgramFragment = (
   & Pick<Program, 'id' | 'name' | 'location' | 'allDay' | 'start' | 'end' | 'tags' | 'dimension' | 'facilitators' | 'levelOfCare' | 'hobbies'>
   & { attendance: Array<(
     { __typename?: 'Attendance' }
-    & Pick<Attendance, 'residentId' | 'status'>
+    & AttendanceFragment
   )> }
+);
+
+export type AttendanceFragment = (
+  { __typename?: 'Attendance' }
+  & Pick<Attendance, 'residentId' | 'status'>
 );
 
 export type ResidentsListQueryVariables = Exact<{ [key: string]: never; }>;
@@ -201,6 +206,12 @@ export type ResidentFragment = (
   & Pick<Resident, 'id' | 'name' | 'preferredName' | 'status' | 'room' | 'levelOfCare' | 'ambulation' | 'birthDate' | 'moveInDate'>
 );
 
+export const AttendanceFragmentDoc = gql`
+    fragment Attendance on Attendance {
+  residentId
+  status
+}
+    `;
 export const ProgramFragmentDoc = gql`
     fragment Program on Program {
   id
@@ -211,15 +222,14 @@ export const ProgramFragmentDoc = gql`
   end
   tags
   attendance {
-    residentId
-    status
+    ...Attendance
   }
   dimension
   facilitators
   levelOfCare
   hobbies
 }
-    `;
+    ${AttendanceFragmentDoc}`;
 export const ResidentFragmentDoc = gql`
     fragment Resident on Resident {
   id
@@ -315,6 +325,7 @@ export const namedOperations = {
   },
   Fragment: {
     Program: 'Program',
+    Attendance: 'Attendance',
     Resident: 'Resident'
   }
 }
