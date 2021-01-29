@@ -99,5 +99,5 @@ const ProgramPeriodDisplay: React.FC<Pick<Props, "program">> = ({
     )} - ${formatTime(endDate)}`;
   }
 
-  return <Typography variant="caption">{periodDisplay}</Typography>;
+  return <Typography variant="body2">{periodDisplay}</Typography>;
 };

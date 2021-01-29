@@ -1,5 +1,5 @@
 import { ApolloProvider } from "@apollo/client";
-import { Container, makeStyles } from "@material-ui/core";
+import { Container, Divider, makeStyles } from "@material-ui/core";
 
 import { client } from "./config/apollo/client";
 import { List as ProgramList } from "./programs/List/List";
@@ -12,8 +12,10 @@ const useStyles = makeStyles(({ spacing }) => ({
   grid: {
     flex: "1",
     display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
+    gridTemplateColumns: "1fr auto 1fr",
+    gridTemplateRows: "100%",
     gap: spacing(2),
+    overflow: "hidden",
   },
 }));
 
@@ -30,6 +32,7 @@ export const App: React.FC = () => {
           selectedResidentId={selectedResidentId}
           setSelectedResidentId={setSelectedResidentId}
         />
+        <Divider orientation="vertical" />
         <ProgramList selectedResidentId={selectedResidentId} />
       </Container>
     </ApolloProvider>

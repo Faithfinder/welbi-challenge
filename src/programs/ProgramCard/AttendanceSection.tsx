@@ -10,9 +10,10 @@ interface Props {
 const useStyles = makeStyles(({ spacing }) => ({
   wrapper: {
     display: "flex",
+    flexFlow: "column nowrap",
     justifyContent: "center",
     alignItems: "center",
-    width: "100px",
+    width: "120px",
   },
 }));
 
@@ -25,7 +26,9 @@ export const AttendanceSection: React.FC<Props> = ({
     (element) => element.residentId === selectedResidentId
   )?.status;
 
-  let content = <Typography>Select a resident to see attendance</Typography>;
+  let content = (
+    <Typography align="center">Select a resident to see attendance</Typography>
+  );
 
   if (selectedResidentId && !attendanceStatus) {
     content = (
@@ -36,7 +39,12 @@ export const AttendanceSection: React.FC<Props> = ({
   }
 
   if (attendanceStatus) {
-    content = <>{attendanceStatus}</>;
+    content = (
+      <>
+        <Typography variant="subtitle2">Attendance</Typography>
+        <Typography>{attendanceStatus}</Typography>
+      </>
+    );
   }
 
   return <div className={classes.wrapper}>{content}</div>;

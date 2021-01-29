@@ -5,9 +5,11 @@ interface Props {
   loading: boolean;
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(({ spacing }) => ({
   list: {
+    flex: 1,
     overflowY: "auto",
+    padding: spacing(1),
   },
 }));
 
