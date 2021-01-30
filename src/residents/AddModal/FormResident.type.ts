@@ -17,6 +17,6 @@ export class FormResident implements ResidentInput {
   room: string = "";
   birthDate: Date = new Date();
   moveInDate: Date = new Date();
-  levelOfCare?: LevelOfCare | null | undefined = null;
-  ambulation?: Ambulation | null | undefined = null;
+  levelOfCare: LevelOfCare = ("" as unknown) as LevelOfCare;
+  ambulation: Ambulation = ("" as unknown) as Ambulation;
 }

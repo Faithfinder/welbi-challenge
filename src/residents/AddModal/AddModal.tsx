@@ -60,7 +60,7 @@ export const AddModal = ({ onClose, ...rest }: Props) => {
   };
 
   return (
-    <Dialog onClose={onClose} {...rest}>
+    <Dialog fullWidth onClose={onClose} {...rest}>
       <Formik initialValues={FormResident.empty()} onSubmit={handleSubmit}>
         <Form>
           <DialogTitle>Add resident</DialogTitle>
