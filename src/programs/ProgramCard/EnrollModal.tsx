@@ -35,7 +35,7 @@ export const EnrollModal = ({
 }: Props) => {
   const classes = useStyles();
   const [status, setStatus] = useState(EnumStatus.Active);
-  const [enroll] = useEnrollMutation();
+  const [enroll] = useEnrollMutation(onClose);
 
   return (
     <Dialog onClose={onClose} {...rest}>
