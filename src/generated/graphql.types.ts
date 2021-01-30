@@ -212,6 +212,19 @@ export type ProgramAttendanceFragment = (
   )> }
 );
 
+export type AddResidentMutationVariables = Exact<{
+  input: ResidentInput;
+}>;
+
+
+export type AddResidentMutation = (
+  { __typename?: 'Mutation' }
+  & { createResident: (
+    { __typename?: 'Resident' }
+    & ResidentFragment
+  ) }
+);
+
 export type ResidentsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -340,6 +353,38 @@ export function useEnrollMutation(baseOptions?: Apollo.MutationHookOptions<Enrol
 export type EnrollMutationHookResult = ReturnType<typeof useEnrollMutation>;
 export type EnrollMutationResult = Apollo.MutationResult<EnrollMutation>;
 export type EnrollMutationOptions = Apollo.BaseMutationOptions<EnrollMutation, EnrollMutationVariables>;
+export const AddResidentDocument = gql`
+    mutation AddResident($input: ResidentInput!) {
+  createResident(input: $input) {
+    ...Resident
+  }
+}
+    ${ResidentFragmentDoc}`;
+export type AddResidentMutationFn = Apollo.MutationFunction<AddResidentMutation, AddResidentMutationVariables>;
+
+/**
+ * __useAddResidentMutation__
+ *
+ * To run a mutation, you first call `useAddResidentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddResidentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addResidentMutation, { data, loading, error }] = useAddResidentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddResidentMutation(baseOptions?: Apollo.MutationHookOptions<AddResidentMutation, AddResidentMutationVariables>) {
+        return Apollo.useMutation<AddResidentMutation, AddResidentMutationVariables>(AddResidentDocument, baseOptions);
+      }
+export type AddResidentMutationHookResult = ReturnType<typeof useAddResidentMutation>;
+export type AddResidentMutationResult = Apollo.MutationResult<AddResidentMutation>;
+export type AddResidentMutationOptions = Apollo.BaseMutationOptions<AddResidentMutation, AddResidentMutationVariables>;
 export const ResidentsListDocument = gql`
     query ResidentsList {
   residents {
@@ -389,7 +434,8 @@ export const namedOperations = {
     ResidentsList: 'ResidentsList'
   },
   Mutation: {
-    Enroll: 'Enroll'
+    Enroll: 'Enroll',
+    AddResident: 'AddResident'
   },
   Fragment: {
     Program: 'Program',

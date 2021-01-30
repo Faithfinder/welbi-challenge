@@ -1,0 +1,5 @@
+mutation AddResident($input: ResidentInput!) {
+  createResident(input: $input) {
+    ...Resident
+  }
+}

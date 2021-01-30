@@ -16,7 +16,12 @@ import { TextField } from "formik-material-ui";
 import { Field, Form, Formik, FormikConfig, useField } from "formik";
 
 import { FormResident } from "./FormResident.type";
-import { Ambulation, LevelOfCare } from "../../generated/graphql.types";
+import {
+  Ambulation,
+  LevelOfCare,
+  useAddResidentMutation,
+  namedOperations,
+} from "../../generated/graphql.types";
 
 interface Props extends Omit<DialogProps, "onClose"> {
   onClose: () => void;
@@ -36,16 +41,24 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 export const AddModal = ({ onClose, ...rest }: Props) => {
   const classes = useStyles();
+  const [addResident] = useAddResidentMutation({
+    refetchQueries: [namedOperations.Query.ResidentsList],
+  });
 
   const handleSubmit: FormikConfig<FormResident>["onSubmit"] = (
     values,
     { setSubmitting }
   ) => {
     values.name = `${values.firstName} ${values.lastName}`;
-    console.log(values);
+    addResident({
+      variables: {
+        input: values,
+      },
+    });
     setSubmitting(false);
     onClose();
   };
+
   return (
     <Dialog onClose={onClose} {...rest}>
       <Formik initialValues={FormResident.empty()} onSubmit={handleSubmit}>
@@ -114,12 +127,9 @@ export const AddModal = ({ onClose, ...rest }: Props) => {
 const LevelOfCareSelect: React.FC = () => {
   const [fieldProps] = useField<LevelOfCare>("levelOfCare");
   return (
-    <FormControl>
+    <FormControl required>
       <InputLabel>Level of care</InputLabel>
       <Select {...fieldProps}>
-        <MenuItem value={null!}>
-          <i>Empty</i>
-        </MenuItem>
         {Object.keys(LevelOfCare).map((key) => {
           const levelOfCare = LevelOfCare[key as keyof typeof LevelOfCare];
           return (
@@ -136,12 +146,9 @@ const LevelOfCareSelect: React.FC = () => {
 const AmbulationSelect: React.FC<{}> = () => {
   const [fieldProps] = useField<Ambulation>("ambulation");
   return (
-    <FormControl>
+    <FormControl required>
       <InputLabel>Ambulation</InputLabel>
       <Select {...fieldProps}>
-        <MenuItem value={null!}>
-          <i>Empty</i>
-        </MenuItem>
         {Object.keys(Ambulation).map((key) => {
           const ambulation = Ambulation[key as keyof typeof Ambulation];
           return (
