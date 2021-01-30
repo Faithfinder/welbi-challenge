@@ -187,7 +187,29 @@ export type ProgramFragment = (
 
 export type AttendanceFragment = (
   { __typename?: 'Attendance' }
-  & Pick<Attendance, 'residentId' | 'status'>
+  & Pick<Attendance, 'residentId' | 'programId' | 'status'>
+);
+
+export type EnrollMutationVariables = Exact<{
+  input: AttendanceInput;
+}>;
+
+
+export type EnrollMutation = (
+  { __typename?: 'Mutation' }
+  & { setAttendance: (
+    { __typename?: 'Attendance' }
+    & AttendanceFragment
+  ) }
+);
+
+export type ProgramAttendanceFragment = (
+  { __typename?: 'Program' }
+  & Pick<Program, 'id'>
+  & { attendance: Array<(
+    { __typename?: 'Attendance' }
+    & Pick<Attendance, 'programId' | 'residentId' | 'status'>
+  )> }
 );
 
 export type ResidentsListQueryVariables = Exact<{ [key: string]: never; }>;
@@ -209,6 +231,7 @@ export type ResidentFragment = (
 export const AttendanceFragmentDoc = gql`
     fragment Attendance on Attendance {
   residentId
+  programId
   status
 }
     `;
@@ -230,6 +253,16 @@ export const ProgramFragmentDoc = gql`
   hobbies
 }
     ${AttendanceFragmentDoc}`;
+export const ProgramAttendanceFragmentDoc = gql`
+    fragment ProgramAttendance on Program {
+  id
+  attendance {
+    programId
+    residentId
+    status
+  }
+}
+    `;
 export const ResidentFragmentDoc = gql`
     fragment Resident on Resident {
   id
@@ -275,6 +308,38 @@ export function useProgramsListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type ProgramsListQueryHookResult = ReturnType<typeof useProgramsListQuery>;
 export type ProgramsListLazyQueryHookResult = ReturnType<typeof useProgramsListLazyQuery>;
 export type ProgramsListQueryResult = Apollo.QueryResult<ProgramsListQuery, ProgramsListQueryVariables>;
+export const EnrollDocument = gql`
+    mutation Enroll($input: AttendanceInput!) {
+  setAttendance(input: $input) {
+    ...Attendance
+  }
+}
+    ${AttendanceFragmentDoc}`;
+export type EnrollMutationFn = Apollo.MutationFunction<EnrollMutation, EnrollMutationVariables>;
+
+/**
+ * __useEnrollMutation__
+ *
+ * To run a mutation, you first call `useEnrollMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEnrollMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [enrollMutation, { data, loading, error }] = useEnrollMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEnrollMutation(baseOptions?: Apollo.MutationHookOptions<EnrollMutation, EnrollMutationVariables>) {
+        return Apollo.useMutation<EnrollMutation, EnrollMutationVariables>(EnrollDocument, baseOptions);
+      }
+export type EnrollMutationHookResult = ReturnType<typeof useEnrollMutation>;
+export type EnrollMutationResult = Apollo.MutationResult<EnrollMutation>;
+export type EnrollMutationOptions = Apollo.BaseMutationOptions<EnrollMutation, EnrollMutationVariables>;
 export const ResidentsListDocument = gql`
     query ResidentsList {
   residents {
@@ -323,9 +388,13 @@ export const namedOperations = {
     ProgramsList: 'ProgramsList',
     ResidentsList: 'ResidentsList'
   },
+  Mutation: {
+    Enroll: 'Enroll'
+  },
   Fragment: {
     Program: 'Program',
     Attendance: 'Attendance',
+    ProgramAttendance: 'ProgramAttendance',
     Resident: 'Resident'
   }
 }

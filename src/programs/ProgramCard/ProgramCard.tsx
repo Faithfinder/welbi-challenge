@@ -72,7 +72,7 @@ export const ProgramCard: React.FC<Props> = ({
       <Divider orientation="vertical" flexItem className={classes.divider} />
       <AttendanceSection
         selectedResidentId={selectedResidentId}
-        attendanceData={program.attendance}
+        program={program}
       />
     </Paper>
   );

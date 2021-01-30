@@ -23,5 +23,6 @@ fragment Program on Program {
 
 fragment Attendance on Attendance {
   residentId
+  programId
   status
 }

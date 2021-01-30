@@ -1,0 +1,14 @@
+mutation Enroll($input: AttendanceInput!) {
+  setAttendance(input: $input) {
+    ...Attendance
+  }
+}
+
+fragment ProgramAttendance on Program {
+  id
+  attendance {
+    programId
+    residentId
+    status
+  }
+}

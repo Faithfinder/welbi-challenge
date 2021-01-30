@@ -1,13 +1,14 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
-import React from "react";
-import { AttendanceFragment } from "../../generated/graphql.types";
+import React, { useState } from "react";
+import { ProgramFragment } from "../../generated/graphql.types";
+import { EnrollModal } from "./EnrollModal";
 
 interface Props {
   selectedResidentId: string | null;
-  attendanceData: AttendanceFragment[];
+  program: ProgramFragment;
 }
 
-const useStyles = makeStyles(({ spacing }) => ({
+const useStyles = makeStyles(() => ({
   wrapper: {
     display: "flex",
     flexFlow: "column nowrap",
@@ -19,10 +20,12 @@ const useStyles = makeStyles(({ spacing }) => ({
 
 export const AttendanceSection: React.FC<Props> = ({
   selectedResidentId,
-  attendanceData,
+  program,
 }) => {
   const classes = useStyles();
-  const attendanceStatus = attendanceData.find(
+  const [enrollModalOpen, setEnrollModalOpen] = useState(false);
+
+  const attendanceStatus = program.attendance.find(
     (element) => element.residentId === selectedResidentId
   )?.status;
 
@@ -32,7 +35,11 @@ export const AttendanceSection: React.FC<Props> = ({
 
   if (selectedResidentId && !attendanceStatus) {
     content = (
-      <Button variant="contained" color="primary">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => setEnrollModalOpen(true)}
+      >
         Enroll
       </Button>
     );
@@ -47,5 +54,15 @@ export const AttendanceSection: React.FC<Props> = ({
     );
   }
 
-  return <div className={classes.wrapper}>{content}</div>;
+  return (
+    <>
+      <EnrollModal
+        open={enrollModalOpen}
+        onClose={() => setEnrollModalOpen(false)}
+        residentId={selectedResidentId!}
+        programId={program.id}
+      />
+      <div className={classes.wrapper}>{content}</div>
+    </>
+  );
 };
