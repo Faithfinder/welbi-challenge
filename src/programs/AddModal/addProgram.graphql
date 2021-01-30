@@ -1,0 +1,5 @@
+mutation AddProgram($input: ProgramInput!) {
+  createProgram(input: $input) {
+    ...Program
+  }
+}

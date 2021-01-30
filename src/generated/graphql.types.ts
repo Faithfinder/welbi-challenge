@@ -165,6 +165,19 @@ export type MutationsetAttendanceArgs = {
   input: AttendanceInput;
 };
 
+export type AddProgramMutationVariables = Exact<{
+  input: ProgramInput;
+}>;
+
+
+export type AddProgramMutation = (
+  { __typename?: 'Mutation' }
+  & { createProgram: (
+    { __typename?: 'Program' }
+    & ProgramFragment
+  ) }
+);
+
 export type ProgramsListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -289,6 +302,38 @@ export const ResidentFragmentDoc = gql`
   moveInDate
 }
     `;
+export const AddProgramDocument = gql`
+    mutation AddProgram($input: ProgramInput!) {
+  createProgram(input: $input) {
+    ...Program
+  }
+}
+    ${ProgramFragmentDoc}`;
+export type AddProgramMutationFn = Apollo.MutationFunction<AddProgramMutation, AddProgramMutationVariables>;
+
+/**
+ * __useAddProgramMutation__
+ *
+ * To run a mutation, you first call `useAddProgramMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddProgramMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addProgramMutation, { data, loading, error }] = useAddProgramMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddProgramMutation(baseOptions?: Apollo.MutationHookOptions<AddProgramMutation, AddProgramMutationVariables>) {
+        return Apollo.useMutation<AddProgramMutation, AddProgramMutationVariables>(AddProgramDocument, baseOptions);
+      }
+export type AddProgramMutationHookResult = ReturnType<typeof useAddProgramMutation>;
+export type AddProgramMutationResult = Apollo.MutationResult<AddProgramMutation>;
+export type AddProgramMutationOptions = Apollo.BaseMutationOptions<AddProgramMutation, AddProgramMutationVariables>;
 export const ProgramsListDocument = gql`
     query ProgramsList {
   programs {
@@ -434,6 +479,7 @@ export const namedOperations = {
     ResidentsList: 'ResidentsList'
   },
   Mutation: {
+    AddProgram: 'AddProgram',
     Enroll: 'Enroll',
     AddResident: 'AddResident'
   },
