@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://welbi.org/api/graphql?token=1"
+schema: "https://welbi.org/api/graphql?token=f4df52a9-b9da-41af-9f12-887a3336fcf2"
 documents: "src/**/*.graphql"
 generates:
   src/generated/graphql.types.ts:
