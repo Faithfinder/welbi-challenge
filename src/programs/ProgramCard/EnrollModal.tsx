@@ -6,17 +6,11 @@ import {
   DialogProps,
   DialogTitle,
   makeStyles,
-  MenuItem,
-  Select,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import {
-  AttendanceInput,
-  EnumStatus,
-  ProgramAttendanceFragment,
-  ProgramAttendanceFragmentDoc,
-  useEnrollMutation,
-} from "../../generated/graphql.types";
+import { EnumStatus } from "../../generated/graphql.types";
+import { StatusSelect } from "./StatusSelect";
+import { useEnrollMutation } from "./useEnrollMutation";
 
 interface Props extends Omit<DialogProps, "onClose"> {
   onClose: () => void;
@@ -41,70 +35,31 @@ export const EnrollModal = ({
 }: Props) => {
   const classes = useStyles();
   const [status, setStatus] = useState(EnumStatus.Active);
-  const [enroll] = useConfiguredEnrollMutation(
-    { residentId, programId, status },
-    onClose
-  );
+  const [enroll] = useEnrollMutation();
 
   return (
     <Dialog onClose={onClose} {...rest}>
       <DialogTitle>Please select attendance status</DialogTitle>
       <DialogContent className={classes.body}>
-        {`Resident: ${residentId}, program: ${programId}`}
-        <Select
+        <StatusSelect
           className={classes.select}
           value={status}
           onChange={(e) => setStatus(e.target.value as EnumStatus)}
-        >
-          {Object.keys(EnumStatus).map((key) => {
-            const status = EnumStatus[key as keyof typeof EnumStatus];
-            return (
-              <MenuItem key={status} value={status}>
-                {status}
-              </MenuItem>
-            );
-          })}
-        </Select>
+        />
       </DialogContent>
       <DialogActions>
-        <Button color="primary" variant="contained" onClick={() => enroll()}>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() =>
+            enroll({
+              variables: { input: { residentId, programId, status } },
+            })
+          }
+        >
           Enroll
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
-
-const useConfiguredEnrollMutation = (
-  { residentId, programId, status }: AttendanceInput,
-  onCompleted: () => void
-) =>
-  useEnrollMutation({
-    variables: {
-      input: {
-        residentId,
-        programId,
-        status,
-      },
-    },
-    update: (cache, result) => {
-      if (result.data) {
-        const currentProgram = cache.readFragment<ProgramAttendanceFragment>({
-          id: `Program:${programId}`,
-          fragment: ProgramAttendanceFragmentDoc,
-        });
-
-        cache.writeFragment({
-          id: `Program:${programId}`,
-          fragment: ProgramAttendanceFragmentDoc,
-          data: {
-            attendance: [
-              ...(currentProgram?.attendance ?? []),
-              result.data.setAttendance,
-            ],
-          },
-        });
-      }
-    },
-    onCompleted,
-  });

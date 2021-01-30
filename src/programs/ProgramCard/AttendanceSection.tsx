@@ -1,7 +1,9 @@
 import { Button, makeStyles, Typography } from "@material-ui/core";
 import React, { useState } from "react";
-import { ProgramFragment } from "../../generated/graphql.types";
+import { EnumStatus, ProgramFragment } from "../../generated/graphql.types";
 import { EnrollModal } from "./EnrollModal";
+import { StatusSelect } from "./StatusSelect";
+import { useEnrollMutation } from "./useEnrollMutation";
 
 interface Props {
   selectedResidentId: string | null;
@@ -29,6 +31,8 @@ export const AttendanceSection: React.FC<Props> = ({
     (element) => element.residentId === selectedResidentId
   )?.status;
 
+  const [enroll, { loading }] = useEnrollMutation();
+
   let content = (
     <Typography align="center">Select a resident to see attendance</Typography>
   );
@@ -45,11 +49,27 @@ export const AttendanceSection: React.FC<Props> = ({
     );
   }
 
-  if (attendanceStatus) {
+  if (selectedResidentId && attendanceStatus) {
     content = (
       <>
         <Typography variant="subtitle2">Attendance</Typography>
-        <Typography>{attendanceStatus}</Typography>
+        <Typography>
+          <StatusSelect
+            disabled={loading}
+            value={attendanceStatus}
+            onChange={(e) =>
+              enroll({
+                variables: {
+                  input: {
+                    residentId: selectedResidentId,
+                    programId: program.id,
+                    status: e.target.value as EnumStatus,
+                  },
+                },
+              })
+            }
+          />
+        </Typography>
       </>
     );
   }
